@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/infrastructure/database/prisma/generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Indicator {
+  id           String        @id // VARCHAR / Código externo (ex: "USD_BRL")
+  name         String        // Nome descritivo do indicador
+  source       String        // Provedor (ex: "BCB", "FRED")
+  unit         String        // Unidade de medida (ex: "BRL", "Index", "%")
+  frequency    String        // Periodicidade (ex: "DAILY", "MONTHLY")
+  lastValue    Decimal       @db.Decimal(12, 4) @map("last_value")
+  variation    Decimal       @db.Decimal(8, 4) 
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  observations Observation[]
+  favorite     Favorite?     // Relação 0..1 com favoritos
+
+  @@map("indicators")
+}
+
+model Observation {
+  id            String    @id @default(uuid())
+  indicatorId   String    @map("indicator_id")
+  indicator     Indicator @relation(fields: [indicatorId], references: [id], onDelete: Cascade)
+  referenceDate DateTime  @map("reference_date")
+  value         Decimal   @db.Decimal(12, 4)
+
+  // Garante idempotência na sincronização (evita duplicatas na mesma data)
+  @@unique([indicatorId, referenceDate])
+  @@index([indicatorId, referenceDate])
+  @@map("observations")
+}
+
+model Favorite {
+  indicatorId String    @id @map("indicator_id") // Atua como PK e FK simultaneamente
+  indicator   Indicator @relation(fields: [indicatorId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  @@map("favorites")
+}
