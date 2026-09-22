@@ -1,0 +1,15 @@
+{
+  "name": "@pulse-fx/api",
+  "version": "1.0.0",
+  "description": "Backend API para o painel macroeconômico Pulse FX",
+  "private": true,
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsup src/index.ts --format cjs",
+    "start": "node dist/index.js",
+    "test": "vitest"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

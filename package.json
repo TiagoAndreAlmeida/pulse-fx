@@ -1,0 +1,16 @@
+{
+  "name": "pulse-fx",
+  "version": "1.0.0",
+  "description": "Painel de Acompanhamento Cambial (BRL/USD)",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:api": "npm run dev --workspace=api",
+    "dev:web": "npm run dev --workspace=web",
+    "dev": "npm run dev:api & npm run dev:web",
+    "test": "npm run test --workspaces"
+  }
+}
