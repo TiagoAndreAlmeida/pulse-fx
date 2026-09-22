@@ -1,13 +1,8 @@
 {
-  "name": "packages",
+  "name": "@pulse-fx/shared",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs"
+  "description": "Tipagens e interfaces compartilhadas do Pulse FX",
+  "main": "index.ts",
+  "types": "index.ts",
+  "dependencies": {}
 }
