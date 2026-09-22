@@ -1,0 +1,10 @@
+# Ignora arquivos desnecessários no build do Docker
+node_modules
+npm-debug.log
+.git
+.env
+.env.local
+dist
+build
+coverage
+*.md
