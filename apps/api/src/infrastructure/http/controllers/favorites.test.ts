@@ -2,14 +2,12 @@ import request from 'supertest';
 import express from 'express';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-const mockExecute = vi.fn();
-const mockFavoritesExecute = vi.fn();
 
 vi.mock('@/main/factories/use-cases', () => ({
-  makeGetAllIndicatorsUseCase: () => ({
-    execute: mockExecute,
-  }),
   makeGetFavoriteIndicatorsUseCase: () => ({
+    execute: vi.fn(),
+  }),
+  makeGetAllIndicatorsUseCase: () => ({
     execute: vi.fn(),
   }),
   makeGetIndicatorDetailUseCase: () => ({
@@ -22,7 +20,7 @@ vi.mock('@/main/factories/use-cases', () => ({
 
 import { registerRoutes } from '@/infrastructure/http/controllers';
 
-describe('Indicators Controller - GET /indicators (Unit)', () => {
+describe('Favorites Controller - GET /indicators/favorites (Unit)', () => {
   let app: express.Express;
 
   beforeEach(() => {
@@ -37,8 +35,8 @@ describe('Indicators Controller - GET /indicators (Unit)', () => {
     vi.resetAllMocks();
   });
 
-  it('deve retornar 200 com lista de indicadores', async () => {
-    const mockIndicators = [
+  it('deve retornar 200 com lista de favoritos', async () => {
+    const mockFavorites = [
       {
         id: 'USD_BRL',
         name: 'Dólar Comercial PTAX',
@@ -61,31 +59,32 @@ describe('Indicators Controller - GET /indicators (Unit)', () => {
       },
     ];
 
-    mockExecute.mockResolvedValue({ indicators: mockIndicators });
+    mockFavoritesExecute.mockResolvedValue({ indicators: mockFavorites });
 
-    const response = await request(app).get('/indicators');
+    const response = await request(app).get('/indicators/favorites');
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveLength(2);
     expect(response.body[0].id).toBe('USD_BRL');
     expect(response.body[1].id).toBe('SELIC');
-    expect(mockExecute).toHaveBeenCalledTimes(1);
+    expect(response.body[0]).toHaveProperty('lastValue');
+    expect(response.body[0]).toHaveProperty('variation');
+    expect(response.body[0]).toHaveProperty('referenceDate');
   });
 
-  it('deve retornar array vazio quando não há indicadores', async () => {
-    mockExecute.mockResolvedValue({ indicators: [] });
+  it('deve retornar array vazio quando não há favoritos', async () => {
+    mockFavoritesExecute.mockResolvedValue({ indicators: [] });
 
-    const response = await request(app).get('/indicators');
+    const response = await request(app).get('/indicators/favorites');
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual([]);
-    expect(mockExecute).toHaveBeenCalledTimes(1);
   });
 
   it('deve retornar 500 quando use case lança erro', async () => {
-    mockExecute.mockRejectedValue(new Error('Database error'));
+    mockFavoritesExecute.mockRejectedValue(new Error('Database error'));
 
-    const response = await request(app).get('/indicators');
+    const response = await request(app).get('/indicators/favorites');
 
     expect(response.status).toBe(500);
     expect(response.body).toMatchObject({
