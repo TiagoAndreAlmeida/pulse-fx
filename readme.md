@@ -35,7 +35,7 @@ Para garantir **normalização**, **alta performance em consultas** e **idempot�
 | **`favorites`** | Persistência real da funcionalidade "Meus Indicadores"[cite: 1]. | `indicator_id` (FK/PK) | Aponta para $1$ indicador (`indicators`). |
 
 #### Destaques de Engenharia na Modelagem:
-* **Desacoplamento de Metadados (`indicators` vs `observations`):** Evita redundância massiva de strings na base (nomes, unidades, provedores) a cada leitura diária. A listagem de cartões no frontend consome diretamente a tabela `indicators`, eliminando a necessidade de varreduras computacionalmente custosas (`SELECT DISTINCT`) sobre o histórico de dados.
+* **Desacoplamento de Metadados (`indicators` vs `observations`):** Evita redundância massiva de strings na base (nomes, unidades, provedores) a cada leitura diária. A listagem de cartões no frontend consome diretamente a tabela `indicators`, evitando a necessidade de derivar metadados a partir do histórico de observações e simplificando as consultas do dashboard.
 * **Idempotência e Integridade (`observations`):** A restrição única `UNIQUE(indicator_id, reference_date)` garante que re-execuções da rotina de sincronização não dupliquem registros, utilizando a estratégia `ON CONFLICT DO NOTHING`.
 * **Persistência de Favoritos Sem Overengineering (`favorites`):** Como o escopo do MVP não exige autenticação de usuários, a tabela de favoritos funciona em modelo *single-tenant* global, persistindo preferências com chave primária e estrangeira vinculada à tabela `indicators` e remoção em cascata (`ON DELETE CASCADE`).
 
