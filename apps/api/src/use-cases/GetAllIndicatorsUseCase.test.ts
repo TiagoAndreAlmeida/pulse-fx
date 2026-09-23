@@ -25,20 +25,22 @@ interface IndicatorProps {
   lastValue: number;
   variation: number;
   updatedAt: Date;
-  favoriteId?: string;
 }
 
 describe('GetAllIndicatorsUseCase', () => {
   it('deve retornar todos os indicadores mapeados para DTO', async () => {
-    const repo = {
+    const indicatorRepo = {
       findAll: vi.fn().mockResolvedValue([
         makeIndicator({ id: 'USD_BRL' }),
         makeIndicator({ id: 'SELIC', name: 'Selic', source: 'BCB', unit: 'PERCENTAGE', frequency: 'DAILY', lastValue: 13.75, variation: 0 }),
       ]),
+      findById: vi.fn(),
       findFavorites: vi.fn(),
+      save: vi.fn(),
+      update: vi.fn(),
     };
 
-    const useCase = new GetAllIndicatorsUseCase(repo as any);
+    const useCase = new GetAllIndicatorsUseCase(indicatorRepo as any);
     const result = await useCase.execute();
 
     expect(result.indicators).toHaveLength(2);
@@ -50,19 +52,21 @@ describe('GetAllIndicatorsUseCase', () => {
       frequency: 'DAILY',
       lastValue: 5.25,
       variation: 0.02,
-      isFavorite: false,
     });
     expect(result.indicators[0].referenceDate).toEqual(new Date('2026-09-20'));
-    expect(repo.findAll).toHaveBeenCalled();
+    expect(indicatorRepo.findAll).toHaveBeenCalled();
   });
 
   it('deve retornar array vazio quando não há indicadores', async () => {
-    const repo = {
+    const indicatorRepo = {
       findAll: vi.fn().mockResolvedValue([]),
+      findById: vi.fn(),
       findFavorites: vi.fn(),
+      save: vi.fn(),
+      update: vi.fn(),
     };
 
-    const useCase = new GetAllIndicatorsUseCase(repo as any);
+    const useCase = new GetAllIndicatorsUseCase(indicatorRepo as any);
     const result = await useCase.execute();
 
     expect(result.indicators).toEqual([]);
@@ -70,12 +74,15 @@ describe('GetAllIndicatorsUseCase', () => {
 
   it('deve chamar findAll do repositório', async () => {
     const findAllMock = vi.fn().mockResolvedValue([makeIndicator()]);
-    const repo = {
+    const indicatorRepo = {
       findAll: findAllMock,
+      findById: vi.fn(),
       findFavorites: vi.fn(),
+      save: vi.fn(),
+      update: vi.fn(),
     };
 
-    const useCase = new GetAllIndicatorsUseCase(repo as any);
+    const useCase = new GetAllIndicatorsUseCase(indicatorRepo as any);
     await useCase.execute();
 
     expect(findAllMock).toHaveBeenCalledTimes(1);

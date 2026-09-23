@@ -12,6 +12,5 @@ export interface IndicatorDetailDTO {
   lastValue: number;
   variation: number;
   referenceDate: Date;
-  isFavorite: boolean;
   observations: ObservationPointDTO[];
 }

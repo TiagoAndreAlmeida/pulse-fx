@@ -12,7 +12,6 @@ function makeIndicator(overrides: Partial<IndicatorProps> = {}): Indicator {
     lastValue: 5.25,
     variation: 0.02,
     updatedAt: new Date('2026-09-20'),
-    favoriteId: 'USD_BRL',
     ...overrides,
   });
 }
@@ -26,7 +25,6 @@ interface IndicatorProps {
   lastValue: number;
   variation: number;
   updatedAt: Date;
-  favoriteId?: string;
 }
 
 describe('GetFavoriteIndicatorsUseCase', () => {
@@ -50,7 +48,6 @@ describe('GetFavoriteIndicatorsUseCase', () => {
       frequency: 'DAILY',
       lastValue: 5.25,
       variation: 0.02,
-      isFavorite: true,
     });
     expect(result.indicators[0].referenceDate).toEqual(new Date('2026-09-20'));
     expect(repo.findFavorites).toHaveBeenCalled();

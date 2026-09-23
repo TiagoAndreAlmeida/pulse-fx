@@ -14,4 +14,7 @@ export class Favorite {
     return this.props.createdAt;
   }
 
+  static create(props: FavoriteProps): Favorite {
+    return new Favorite(props);
+  }
 }

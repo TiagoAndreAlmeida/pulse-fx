@@ -13,7 +13,6 @@ function makeIndicator(overrides: Partial<IndicatorProps> = {}): Indicator {
     lastValue: 5.25,
     variation: 0.02,
     updatedAt: new Date('2026-09-20'),
-    favoriteId: 'USD_BRL',
     ...overrides,
   });
 }
@@ -37,7 +36,6 @@ interface IndicatorProps {
   lastValue: number;
   variation: number;
   updatedAt: Date;
-  favoriteId?: string;
 }
 
 interface ObservationProps {
@@ -83,7 +81,6 @@ describe('GetIndicatorDetailUseCase', () => {
       frequency: 'DAILY',
       lastValue: 5.25,
       variation: 0.02,
-      isFavorite: true,
     });
     expect(result.indicator.referenceDate).toEqual(new Date('2026-09-20'));
     expect(result.indicator.observations).toHaveLength(3);

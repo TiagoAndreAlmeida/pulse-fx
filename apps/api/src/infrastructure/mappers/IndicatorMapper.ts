@@ -2,7 +2,7 @@ import { Indicator } from '@/domain/entities/Indicator';
 import { Prisma, Indicator as PrismaIndicator } from '@/infrastructure/database/prisma/generated/client';
 
 export class IndicatorMapper {
-  static toDomain(prisma: PrismaIndicator & { favorite?: { indicatorId: string } | null }): Indicator {
+  static toDomain(prisma: PrismaIndicator): Indicator {
     return new Indicator({
       id: prisma.id,
       name: prisma.name,
@@ -12,7 +12,6 @@ export class IndicatorMapper {
       lastValue: Number(prisma.lastValue),
       variation: Number(prisma.variation),
       updatedAt: prisma.updatedAt,
-      favoriteId: prisma.favorite?.indicatorId,
     });
   }
 

@@ -7,7 +7,6 @@ export interface IndicatorProps {
   lastValue: number;
   variation: number;
   updatedAt: Date;
-  favoriteId?: string;
 }
 
 export class Indicator {
@@ -43,9 +42,5 @@ export class Indicator {
 
   get updatedAt(): Date {
     return this.props.updatedAt;
-  }
-
-  get favoriteId(): string | undefined {
-    return this.props.favoriteId;
   }
 }

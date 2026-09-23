@@ -34,7 +34,6 @@ export class GetIndicatorDetailUseCase {
         lastValue: indicator.lastValue,
         variation: indicator.variation,
         referenceDate: indicator.updatedAt,
-        isFavorite: !!indicator.favoriteId,
         observations: observationPoints,
       },
     };

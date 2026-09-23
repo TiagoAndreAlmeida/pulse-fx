@@ -9,7 +9,6 @@ export interface IndicatorCardDTO {
   lastValue: number;
   variation: number;
   referenceDate: Date;
-  isFavorite: boolean;
 }
 
 export function toIndicatorCardDTO(indicator: Indicator): IndicatorCardDTO {
@@ -22,6 +21,5 @@ export function toIndicatorCardDTO(indicator: Indicator): IndicatorCardDTO {
     lastValue: indicator.lastValue,
     variation: indicator.variation,
     referenceDate: indicator.updatedAt,
-    isFavorite: !!indicator.favoriteId,
   };
 }

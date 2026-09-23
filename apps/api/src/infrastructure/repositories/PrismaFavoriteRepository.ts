@@ -13,6 +13,13 @@ export class PrismaFavoriteRepository implements IFavoriteRepository {
     return records.map(FavoriteMapper.toDomain);
   }
 
+  async findByIndicatorId(indicatorId: string): Promise<Favorite | null> {
+    const record = await this.prisma.favorite.findUnique({
+      where: { indicatorId },
+    });
+    return record ? FavoriteMapper.toDomain(record) : null;
+  }
+
   async add(favorite: Favorite): Promise<void> {
     await this.prisma.favorite.create({
       data: FavoriteMapper.toCreateInput(favorite),
