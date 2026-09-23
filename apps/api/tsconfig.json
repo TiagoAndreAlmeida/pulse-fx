@@ -13,7 +13,9 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "ignoreDeprecations": "6.0"
+    "ignoreDeprecations": "6.0",
+    "types": ["vitest/globals", "node"]
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["**/*.test.ts", "**/*.spec.ts", "node_modules", "dist"]
 }
