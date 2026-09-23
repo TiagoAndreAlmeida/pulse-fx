@@ -10,7 +10,7 @@ export interface IndicatorProps {
 }
 
 export class Indicator {
-  constructor(private readonly props: IndicatorProps) { }
+  constructor(private props: IndicatorProps) { }
 
   get id(): string {
     return this.props.id;
@@ -42,5 +42,11 @@ export class Indicator {
 
   get updatedAt(): Date {
     return this.props.updatedAt;
+  }
+
+  updateValue(newValue: number, newVariation: number, updatedAt: Date): void {
+    this.props.lastValue = newValue;
+    this.props.variation = newVariation;
+    this.props.updatedAt = updatedAt;
   }
 }

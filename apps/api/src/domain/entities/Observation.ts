@@ -24,4 +24,7 @@ export class Observation {
     return this.props.value;
   }
 
+  static create(props: ObservationProps): Observation {
+    return new Observation(props);
+  }
 }
