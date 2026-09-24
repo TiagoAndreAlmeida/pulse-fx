@@ -8,7 +8,7 @@ interface ObservationsTableProps {
 export function ObservationsTable({ observations, unit }: ObservationsTableProps) {
   if (!observations || observations.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-500">
+      <div className="text-center py-8 text-neutral-400">
         Nenhuma observação disponível
       </div>
     );

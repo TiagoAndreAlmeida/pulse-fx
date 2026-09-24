@@ -39,17 +39,17 @@ export function DataLimitations({ indicatorId }: DataLimitationsProps) {
   ];
 
   return (
-    <div className="prose prose-sm max-w-none text-gray-700">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Limitações e Observações</h3>
-      <ul className="list-disc list-inside space-y-2 text-gray-700">
+    <div className="prose prose-sm max-w-none text-neutral-700">
+      <h3 className="text-lg font-semibold text-neutral-900 mb-4">Limitações e Observações</h3>
+      <ul className="list-disc list-inside space-y-2 text-neutral-700">
         {limitations.map((limitation, index) => (
           <li key={index} className="ml-4">
             {limitation}
           </li>
         ))}
       </ul>
-      <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
-        <p className="text-sm text-amber-800">
+      <div className="mt-4 p-3 bg-warning-100 border border-warning-200 rounded-lg">
+        <p className="text-sm text-warning-800">
           <strong>Disclaimer:</strong> As informações apresentadas têm caráter exclusivamente educacional
           e informativo. Não constituem recomendação de investimento, oferta ou solicitação de compra
           ou venda de quaisquer ativos.
