@@ -12,7 +12,8 @@ Pré-requisitos: Docker + Docker Compose e uma `FRED_API_KEY` válida (ver "Vari
 git clone <repo-url>
 cd "Pulse FX"
 
-# Sobe db (5432), api (3333) e web (80)
+# Sobe db (host 5433 → container 5432), api (3333) e web (80).
+# Na primeira subida a API aplica migrations, faz seed e sync inicial sozinha.
 docker-compose up -d
 
 # Acompanhar logs
@@ -49,7 +50,7 @@ npm run dev:web      # vite (porta 5173)
 | API | `PORT` | Não (default 3333) | Porta da API. |
 | Web (build-time) | `VITE_API_URL` | Sim | URL base da API consumida pelo frontend. No Compose é passada como arg (`http://localhost:3333`). Local/dev usa `http://localhost:3333` por padrão. |
 
-Atenção: no `docker-compose.yml` o serviço `api` recebe `DATABASE_URL` e `PORT` por padrão. Para sincronizar o FRED e usar o endpoint admin dentro do Docker, exporte `FRED_API_KEY` e `ADMIN_API_KEY` no ambiente do host ou adicione-as ao bloco `environment` do serviço `api`. O arquivo local de referência é `apps/api/.env`.
+No `docker-compose.yml` o serviço `api` lê `apps/api/.env` via `env_file` (de onde vêm `FRED_API_KEY` e `ADMIN_API_KEY`) e sobrescreve `DATABASE_URL`/`PORT` via `environment` (o `environment` tem precedência), garantindo o host `db` da rede do compose mesmo que o `.env` local aponte para `localhost`. O banco é exposto no host em `5433` para não colidir com outro PostgreSQL local; entre containers usa-se `db:5432`.
 
 ## Funcionalidades (MVP)
 
@@ -115,7 +116,7 @@ Implementação de referência: `apps/api/src/domain/services/VariationCalculato
 * **Paralela e tolerante a falhas:** os 4 indicadores são buscados com `Promise.all`; erro em um não aborta os demais (registrado em `items[].error`).
 * **Idempotente:** `observations` tem constraint `UNIQUE(indicator_id, reference_date)` e a escrita usa `createMany({ skipDuplicates: true })` — re-execuções não duplicam (`ON CONFLICT DO NOTHING`).
 * **Metadados recalculados:** após persistir, as 2 observações mais recentes definem `last_value`/`variation`/`updated_at` em `indicators`.
-* **Sync inicial na criação do container:** o CMD da imagem (`apps/api/Dockerfile`) executa, nesta ordem, `prisma migrate deploy` → `node dist/main/run-initial-sync.js` → `node dist/index.js`. O runner (`apps/api/src/main/run-initial-sync.ts`, compilado pelo build padrão) popula os 4 indicadores logo na primeira subida, sem aguardar o cron. Falha no sync inicial **não** impede a API de subir (`|| true`); para dados completos do FRED, exporte `FRED_API_KEY` antes do `docker-compose up -d` (repassada ao serviço `api` via compose).
+* **Sync inicial na criação do container:** o CMD da imagem (`apps/api/Dockerfile`) executa, nesta ordem, `prisma migrate deploy` → seed dos 4 indicadores (`node dist/.../seeds/seed.js`, upsert idempotente) → `node dist/main/run-initial-sync.js` → `node dist/index.js`. O runner (`apps/api/src/main/run-initial-sync.ts`, compilado pelo build padrão) popula os 4 indicadores logo na primeira subida, sem aguardar o cron. Falha no sync inicial **não** impede a API de subir (`|| true`); a chave do FRED chega ao container via `env_file` (`apps/api/.env`). Detalhe de imagem: o CLI `prisma` é copiado de `apps/api/node_modules` do builder (onde o `npm install` do monorepo o instala) com `PATH` ajustado, e `prisma.config.ts` é copiado para a raiz da imagem — sem isso o `migrate deploy` falha por falta de `datasource.url`.
 * **Agendamento:** cron diário às 19:00 (`0 19 * * *`, `startSyncScheduler`). Horário pós-fechamento do mercado, evitando chamadas redundantes às APIs externas.
 * **Endpoint admin:** `POST /admin/sync` protegido por `x-admin-key` (`ADMIN_API_KEY`):
 
@@ -241,7 +242,7 @@ Pulse FX/
 | :--- | :--- |
 | API | 3333 (dev e Docker) |
 | Web | 5173 (dev) / 80 (Docker/nginx) |
-| PostgreSQL | 5432 |
+| PostgreSQL | 5433 (host) → 5432 (container); 5432 no dev local |
 
 ## Fora de escopo e limitações conhecidas
 
