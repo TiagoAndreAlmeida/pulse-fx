@@ -8,9 +8,14 @@
     "packages/*"
   ],
   "scripts": {
-    "dev:api": "npm run dev --workspace=api",
-    "dev:web": "npm run dev --workspace=web",
+    "dev:api": "npm run dev --workspace=@pulse-fx/api",
+    "dev:web": "npm run dev --workspace=@pulse-fx/web",
     "dev": "npm run dev:api & npm run dev:web",
-    "test": "npm run test --workspaces"
+    "build": "npm run build --workspaces",
+    "build:api": "npm run build --workspace=@pulse-fx/api",
+    "build:web": "npm run build --workspace=@pulse-fx/web",
+    "test": "npm run test --workspaces",
+    "test:api": "npm run test --workspace=@pulse-fx/api",
+    "test:web": "npm run test --workspace=@pulse-fx/web"
   }
 }
