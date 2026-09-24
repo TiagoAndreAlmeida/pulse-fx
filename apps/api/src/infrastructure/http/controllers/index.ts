@@ -3,10 +3,13 @@ import { makeIndicatorsRoute } from './indicators';
 import { makeFavoritesRoute } from './favorites';
 import { makeIndicatorDetailRoute } from './indicator-detail';
 import { makeFavoriteToggleRoute } from './favorite-toggle';
+import { makeAdminSyncRoute } from './admin-sync';
 import { makeGetAllIndicatorsUseCase } from '@/main/factories/use-cases';
 import { makeGetFavoriteIndicatorsUseCase } from '@/main/factories/use-cases';
 import { makeGetIndicatorDetailUseCase } from '@/main/factories/use-cases';
 import { makeToggleFavoriteUseCase } from '@/main/factories/use-cases';
+import { makeSyncExternalIndicatorsUseCase } from '@/main/factories/use-cases';
+import { adminAuthMiddleware } from '@/infrastructure/http/middlewares/adminAuth';
 
 export function registerRoutes(app: Application): void {
   app.get('/health', (_req: Request, res: Response) => {
@@ -31,6 +34,12 @@ export function registerRoutes(app: Application): void {
   app.post(
     '/indicators/:id/favorite',
     makeFavoriteToggleRoute(makeToggleFavoriteUseCase())
+  );
+
+  app.post(
+    '/admin/sync',
+    adminAuthMiddleware,
+    makeAdminSyncRoute(makeSyncExternalIndicatorsUseCase())
   );
 
   app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {

@@ -1,3 +1,4 @@
+import { RequestHandler } from 'express';
 import { GetAllIndicatorsUseCase } from '@/use-cases/GetAllIndicatorsUseCase';
 import { GetFavoriteIndicatorsUseCase } from '@/use-cases/GetFavoriteIndicatorsUseCase';
 import { GetIndicatorDetailUseCase } from '@/use-cases/GetIndicatorDetailUseCase';
@@ -37,5 +38,11 @@ export function makeSyncExternalIndicatorsUseCase(): SyncExternalIndicatorsUseCa
     makeObservationRepository(),
     makeBcbProvider(),
     makeFredProvider()
+  );
+}
+
+export function makeAdminSyncRoute(): RequestHandler {
+  return new (require('@/infrastructure/http/controllers/admin-sync').makeAdminSyncRoute)(
+    makeSyncExternalIndicatorsUseCase()
   );
 }
