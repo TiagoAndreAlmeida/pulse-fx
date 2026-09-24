@@ -6,7 +6,6 @@ WORKDIR /app
 # Copia os manifestos para configurar os workspaces do monorepo
 COPY package.json package-lock.json ./
 COPY apps/api/package.json ./apps/api/
-COPY packages/shared/package.json ./packages/shared/
 
 RUN npm install
 
