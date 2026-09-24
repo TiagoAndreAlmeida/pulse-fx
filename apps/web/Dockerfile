@@ -6,7 +6,6 @@ WORKDIR /app
 # Copia os manifestos de workspaces
 COPY package.json package-lock.json ./
 COPY apps/web/package.json ./apps/web/
-COPY packages/shared/package.json ./packages/shared/
 
 RUN npm install
 
