@@ -27,7 +27,7 @@ export function IndicatorGrid({ indicators, favorites, onToggleFavorite, isLoadi
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-responsive">
+    <div className="grid grid-cols-responsive gap-responsive">
       {indicators.map((indicator) => (
         <IndicatorCard
           key={indicator.id}
