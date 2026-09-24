@@ -4,8 +4,7 @@
   "description": "Painel de Acompanhamento Cambial (BRL/USD)",
   "private": true,
   "workspaces": [
-    "apps/*",
-    "packages/*"
+    "apps/*"
   ],
   "scripts": {
     "dev:api": "npm run dev --workspace=@pulse-fx/api",
