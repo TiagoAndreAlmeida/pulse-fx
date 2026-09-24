@@ -17,7 +17,6 @@ export function Footer() {
             <nav className="space-y-2">
               <Link to="/" className="text-sm text-gray-600 hover:text-blue-600 block">Dashboard</Link>
               <Link to="/favorites" className="text-sm text-gray-600 hover:text-blue-600 block">Favoritos</Link>
-              <a href="/admin/sync" className="text-sm text-gray-600 hover:text-blue-600 block">Sincronização Admin</a>
             </nav>
           </div>
           <div>
