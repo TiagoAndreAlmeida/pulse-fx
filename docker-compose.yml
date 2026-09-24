@@ -8,7 +8,7 @@ services:
       POSTGRES_PASSWORD: postgrespassword
       POSTGRES_DB: pulse_fx
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - pulse_pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -25,11 +25,13 @@ services:
     restart: always
     ports:
       - "3333:3333"
+    env_file:
+      - apps/api/.env
     environment:
+      # `environment` tem precedência sobre `env_file`: garante o host `db` do compose
+      # mesmo que o .env local aponte para localhost. FRED/ADMIN keys vêm do .env.
       - DATABASE_URL=postgresql://postgres:postgrespassword@db:5432/pulse_fx?schema=public
       - PORT=3333
-      - FRED_API_KEY=${FRED_API_KEY:-}
-      - ADMIN_API_KEY=${ADMIN_API_KEY:-}
     depends_on:
       db:
         condition: service_healthy
