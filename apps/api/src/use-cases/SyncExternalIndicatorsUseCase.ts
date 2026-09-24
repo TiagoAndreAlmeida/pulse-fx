@@ -33,7 +33,7 @@ export class SyncExternalIndicatorsUseCase {
         try {
           const provider = this.getProvider(indicator);
           const lastObs = await this.observationRepo.findLatest(indicator.id);
-          const startDate = lastObs?.referenceDate || new Date('2026-01-01');
+          const startDate = lastObs?.referenceDate || new Date('2025-01-01');
 
           const externalData = await provider.fetchData(indicator.id, startDate);
 
