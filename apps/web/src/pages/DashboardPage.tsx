@@ -1,13 +1,15 @@
 import { useIndicators } from '@/hooks/useIndicators';
 import { useFavorites } from '@/hooks/useFavorites';
+import { useToggleFavorite } from '@/hooks/useToggleFavorite';
 import { DashboardSkeleton } from '../components/dashboard/DashboardSkeleton';
 import { IndicatorGrid } from '../components/dashboard/IndicatorGrid';
 
 export function DashboardPage() {
   const { data: indicators, isLoading, error } = useIndicators();
   const { data: favorites = [] } = useFavorites();
+  const { mutate: toggleFavorite } = useToggleFavorite();
 
-  const favoritesSet = new Set(favorites.map(f => f.id));
+  const favoritesSet = new Set(favorites.map((f) => f.id));
 
   if (isLoading) {
     return <DashboardSkeleton />;
@@ -59,7 +61,7 @@ export function DashboardPage() {
         <IndicatorGrid
           indicators={indicators}
           favorites={favoritesSet}
-          onToggleFavorite={async () => {}}
+          onToggleFavorite={toggleFavorite}
           isLoading={false}
         />
       </section>
