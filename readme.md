@@ -12,6 +12,10 @@ Pré-requisitos: Docker + Docker Compose e uma `FRED_API_KEY` válida (ver "Vari
 git clone <repo-url>
 cd "Pulse FX"
 
+# Configure a API (obrigatório: sem FRED_API_KEY válida a API nem sobe)
+cp apps/api/.env.example apps/api/.env
+# edite apps/api/.env e informe sua chave: https://fredaccount.stlouisfed.org/apikeys
+
 # Sobe db (host 5433 → container 5432), api (3333) e web (80).
 # Na primeira subida a API aplica migrations, faz seed e sync inicial sozinha.
 docker-compose up -d
