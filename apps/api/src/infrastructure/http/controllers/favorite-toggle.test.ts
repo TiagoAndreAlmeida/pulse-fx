@@ -2,10 +2,11 @@ import request from 'supertest';
 import express from 'express';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
+const mockToggleExecute = vi.fn();
 
 vi.mock('@/main/factories/use-cases', () => ({
   makeToggleFavoriteUseCase: () => ({
-    execute: vi.fn(),
+    execute: mockToggleExecute,
   }),
   makeGetIndicatorDetailUseCase: () => ({
     execute: vi.fn(),
@@ -14,6 +15,9 @@ vi.mock('@/main/factories/use-cases', () => ({
     execute: vi.fn(),
   }),
   makeGetFavoriteIndicatorsUseCase: () => ({
+    execute: vi.fn(),
+  }),
+  makeSyncExternalIndicatorsUseCase: () => ({
     execute: vi.fn(),
   }),
 }));

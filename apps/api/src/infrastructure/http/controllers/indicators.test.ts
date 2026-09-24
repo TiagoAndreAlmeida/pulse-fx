@@ -3,7 +3,6 @@ import express from 'express';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 const mockExecute = vi.fn();
-const mockFavoritesExecute = vi.fn();
 
 vi.mock('@/main/factories/use-cases', () => ({
   makeGetAllIndicatorsUseCase: () => ({
@@ -16,6 +15,9 @@ vi.mock('@/main/factories/use-cases', () => ({
     execute: vi.fn(),
   }),
   makeToggleFavoriteUseCase: () => ({
+    execute: vi.fn(),
+  }),
+  makeSyncExternalIndicatorsUseCase: () => ({
     execute: vi.fn(),
   }),
 }));
