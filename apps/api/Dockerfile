@@ -31,5 +31,7 @@ COPY --from=builder /app/apps/api/node_modules ./apps/api/node_modules 2>/dev/nu
 
 EXPOSE 3333
 
-# Executa as migrations do Prisma de forma segura e idempotente antes de subir a API
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/index.js"]
+# Migrations (idempotente) -> sync inicial (tolerante a falha, ex.: FRED sem chave) -> API.
+# O bloco { ... || true; } garante que a API suba mesmo se o sync inicial falhar;
+# as atualizações seguintes são feitas pelo scheduler (cron diário) ou via POST /admin/sync.
+CMD ["sh", "-c", "npx prisma migrate deploy && { node dist/main/run-initial-sync.js || true; } && node dist/index.js"]

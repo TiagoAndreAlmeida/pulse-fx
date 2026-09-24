@@ -1,9 +1,8 @@
-#!/usr/bin/env tsx
 import "dotenv/config";
-import { makeSyncExternalIndicatorsUseCase } from "../src/main/factories/use-cases";
+import { makeSyncExternalIndicatorsUseCase } from "./factories/use-cases";
 
 async function main() {
-  console.log("🔄 Iniciando teste de sincronização manual...\n");
+  console.log("🔄 Iniciando sincronização inicial...\n");
 
   const startTime = Date.now();
 
