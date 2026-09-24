@@ -5,7 +5,7 @@ import { CardGridSkeleton } from '../common/LoadingSpinner';
 interface IndicatorGridProps {
   indicators: IndicatorCardDTO[];
   favorites: Set<string>;
-  onToggleFavorite: (id: string) => Promise<void>;
+  onToggleFavorite: (id: string) => void;
   isLoading?: boolean;
 }
 

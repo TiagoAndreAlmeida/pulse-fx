@@ -4,10 +4,16 @@ import { type IndicatorCardDTO } from '@/types/api';
 interface IndicatorCardProps {
   indicator: IndicatorCardDTO;
   isFavorite: boolean;
-  onToggleFavorite: (id: string) => Promise<void>;
+  onToggleFavorite: (id: string) => void;
+  isLoading?: boolean;
 }
 
-export function IndicatorCard({ indicator, isFavorite, onToggleFavorite }: IndicatorCardProps) {
+export function IndicatorCard({
+  indicator,
+  isFavorite,
+  onToggleFavorite,
+  isLoading = false,
+}: IndicatorCardProps) {
   const formatValue = (value: number, unit: string) => {
     if (unit === 'CURRENCY') {
       return new Intl.NumberFormat('pt-BR', {
@@ -72,13 +78,50 @@ export function IndicatorCard({ indicator, isFavorite, onToggleFavorite }: Indic
               e.stopPropagation();
               onToggleFavorite(indicator.id);
             }}
-            className={`btn-icon flex-shrink-0 ${isFavorite ? 'btn-icon-active' : ''}`}
+            disabled={isLoading}
+            className={`btn-icon flex-shrink-0 w-9 h-9 ${isFavorite ? 'btn-icon-active' : ''}`}
             aria-label={isFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
             aria-pressed={isFavorite}
+            aria-busy={isLoading}
           >
-            <svg className="w-5 h-5" fill={isFavorite ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.639 0l2.197 5.699a1 1 0 00.95.69h4.198a1 1 0 01.796 1.693l-3.038 2.831a1 1 0 00-.364 1.118l1.07 4.127a1 1 0 001.502.912l3.602-.49a1 1 0 011.249 1.035l-3.786 4.043a1 1 0 00-.262 1.203l-1.13 5.043a1 1 0 01-1.537.751H5.42a1 1 0 01-.792-.506l-1.714-2.995a1 1 0 01.342-1.356L12 3.333l2.621-1.68a1 1 0 011.112 0l2.586 1.942a1 1 0 011.106-.162l1.914-2.766a1 1 0 01.818-1.119l1.993-2.689a1 1 0 01.752-1.232z" fill="currentColor" />
-            </svg>
+            {isLoading ? (
+              <svg
+                className="w-5 h-5 animate-spin"
+                fill="none"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
+              </svg>
+            ) : (
+              <svg
+                className="w-5 h-5"
+                fill={isFavorite ? 'currentColor' : 'none'}
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M11.049 2.927c.3-.921 1.603-.921 1.639 0l2.197 5.699a1 1 0 00.95.69h4.198a1 1 0 01.796 1.693l-3.038 2.831a1 1 0 00-.364 1.118l1.07 4.127a1 1 0 001.502.912l3.602-.49a1 1 0 011.249 1.035l-3.786 4.043a1 1 0 00-.262 1.203l-1.13 5.043a1 1 0 01-1.537.751H5.42a1 1 0 01-.792-.506l-1.714-2.995a1 1 0 01.342-1.356L12 3.333l2.621-1.68a1 1 0 011.112 0l2.586 1.942a1 1 0 011.106-.162l1.914-2.766a1 1 0 01.818-1.119l1.993-2.689a1 1 0 01.752-1.232z"
+                  fill="currentColor"
+                />
+              </svg>
+            )}
           </button>
         </div>
 
