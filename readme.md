@@ -115,6 +115,7 @@ Implementação de referência: `apps/api/src/domain/services/VariationCalculato
 * **Paralela e tolerante a falhas:** os 4 indicadores são buscados com `Promise.all`; erro em um não aborta os demais (registrado em `items[].error`).
 * **Idempotente:** `observations` tem constraint `UNIQUE(indicator_id, reference_date)` e a escrita usa `createMany({ skipDuplicates: true })` — re-execuções não duplicam (`ON CONFLICT DO NOTHING`).
 * **Metadados recalculados:** após persistir, as 2 observações mais recentes definem `last_value`/`variation`/`updated_at` em `indicators`.
+* **Sync inicial na criação do container:** o CMD da imagem (`apps/api/Dockerfile`) executa, nesta ordem, `prisma migrate deploy` → `node dist/main/run-initial-sync.js` → `node dist/index.js`. O runner (`apps/api/src/main/run-initial-sync.ts`, compilado pelo build padrão) popula os 4 indicadores logo na primeira subida, sem aguardar o cron. Falha no sync inicial **não** impede a API de subir (`|| true`); para dados completos do FRED, exporte `FRED_API_KEY` antes do `docker-compose up -d` (repassada ao serviço `api` via compose).
 * **Agendamento:** cron diário às 19:00 (`0 19 * * *`, `startSyncScheduler`). Horário pós-fechamento do mercado, evitando chamadas redundantes às APIs externas.
 * **Endpoint admin:** `POST /admin/sync` protegido por `x-admin-key` (`ADMIN_API_KEY`):
 
