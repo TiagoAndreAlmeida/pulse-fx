@@ -1,8 +1,0 @@
-{
-  "name": "@pulse-fx/shared",
-  "version": "1.0.0",
-  "description": "Tipagens e interfaces compartilhadas do Pulse FX",
-  "main": "index.ts",
-  "types": "index.ts",
-  "dependencies": {}
-}
